@@ -37,6 +37,8 @@
 * When defining a class, we typically focus on two things: _states_ and _behaviours_. States track attributes for individual objects. Behaviours are what objects are capable of doing. Instance variables keep track of state, and instance methods expose behaviour for objects.
 * Objects do not share state between other objects, but do share behaviours. Put another way, the values in the objects' instance variables (states) are different, but they can call the same instance methods (behaviours) defined in the class.
 * Classes also have behaviours not for objects (class methods).
+* Classes group common behaviours and objects encapsulate state.
+* The object's state is saved in an object's instance variables. 
 
 
 
@@ -60,6 +62,33 @@
 * Class methods are methods we can call directly on the class itself, without having to instantiate any objects.
 * When defining a class method, we prepend the method name with the reserved word `self.`.
 * Class methods are where we put functionality that does not pertain to individual objects. Objects contain state, and if we have a method that does not need to deal with states, then we can just use a class method.
+* Instance methods can operate on the instance variables.
+
+###### Instance Variable Scope
+
+* Instance variables are variables that start with `@` and are scoped at the object level.
+* Because the scope of instance variables is at the object level, this means that the instance variable is accessible in an object's instance methods, even if it's initialized outside of that instance method.
+* Unlike local variables, instance variables are accessible within an instance method even if they are not initialized or passed in to the method. Remember, their scope is at the _object level_.
+* Another distinction from local variables is that if you try to reference an uninitialized local variable, you'd get a `NameError`. But if you try to reference an uninitialized instance variable, you get `nil`.
+* Initialize instance variables within instance methods.
+* Instance variables behave the way we'd expect. The only thing to watch out for is to make sure the instance variable is initialized before referencing it.
+
+###### Class Variable Scope
+
+* Class variables start with `@@` and are scoped at the class level. They exhibit two main behaviours:
+  * all objects share 1 copy of the class variable. (This also implies objects can access class variables by way of instance methods.)
+  * class methods can access class variables, regardless of where it's initialized.
+* Only class variables can share state between objects (we're going to ignore globals.).
+* Inheritance can lead to class variables being affected in unexpected and undesirable ways. Redefining a class variable in a sub-class can override its definition in the super-class and all other sub-classes that inherit from it. For this reason, avoid using class variables when working with inheritance. In fact, some Rubyists would go so far as recommending avoiding class variables altogether.
+* Class variables have a very insidious behaviour of allowing sub-classes to override super-class class variables. Further, the change will affect all other sub-classes of the super-class. This is extremely unintuitive behaviour, forcing some Rubyists to eschew using class variables altogether.
+
+###### Constant Variable Scope
+
+* Constants begin with a capital letter and have _lexical_ scope.
+* Constants are available in class methods or instances methods (which implies they are accessible from objects). 
+* In order to access a constant defined in another class, we need to use `::`, the namespace resolution operator.
+* A constant initialized in a super-class is inherited by the sub-class, and can be accessed by both class and instance methods.
+* Constants have _lexical scope_ which makes their scope resolution rules very unique compared to other variable types. If Ruby doesn't find the constant using lexical scope, it'll then look at the inheritance hierarchy.
 
 
 
@@ -101,7 +130,11 @@ However, we have to beware that when calling getter or setter methods, we use cl
 
 **Encapsulation** is hiding pieces of functionality and making it unavailable to the rest of the code base. It is a form of data protection, so that data cannot be manipulated or changed without obvious intention. It is what defines the boundaries in your application and allows your code to achieve new levels of complexity. Ruby, like many other OO languages, **accomplishes this task by creating objects, and exposing interfaces (i.e., methods) to interact with those objects.**  
 
-Encapsulation hides the implementation details of a class from other objects.
+Encapsulation hides the implementation details of a class from other objects.  
+
+Encapsulation lets us hide the internal representation of an object from the outside and only expose the methods and properties that users of the object need. We expose these properties and methods through the public interface of a class: its public methods.  
+
+Classes group common behaviours and **objects encapsulate state**.
 
 ###### Polymorphism  
 
@@ -110,6 +143,13 @@ Encapsulation hides the implementation details of a class from other objects.
 Another way to apply polymorphic structure to Ruby programs is to use a `Module`. Modules are similar to classes in that they contain shared behaviour. However, you cannot create an object with a module. A module must be mixed in with a class using the `include` method invocation. This is called a **mixin**. After mixing in a module, the behaviours declared in that module are available to the class and its objects.  
 
 Polymorphism is the process of using an operator or function in different ways for different data input.  
+
+Polymorphism refers to the ability of different objects to respond in different ways to the same message (or method invocation).
+
+There are several ways to implement polymorphism.
+
+1. Polymorphism through inheritance
+2. Polymorphism through duck typing
 
 ###### Inheritance  
 
@@ -129,7 +169,7 @@ Polymorphism is the process of using an operator or function in different ways f
 * A **module** is a collection of behaviours that is usable in other classes via **mixins**.
 * Using modules to group common behaviours allows us to build a more powerful, flexible and DRY design.
 * Can mix in as many modules as needed.
-* Modules are Ruby's way of implementing multiple inheritance.
+* Modules are Ruby's way of implementing _multiple inheritance_. A class can only sub-class from one parent, bit it can mix in as many modules as it likes.
 
 ##### Inheritance vs. Modules
 
@@ -138,15 +178,16 @@ Polymorphism is the process of using an operator or function in different ways f
   * You can only subclass from one class. But you can mix in as many modules as you'd like.
   * If it's an "is-a" relationship, choose class inheritance. If it's a "has-a" relationship, choose modules. Example: a dog "is an" animal; a dog "has an" abillity to swim.
   * You cannot instantiate modules (i.e., no object can be created from a module). Modules are used only for namespacing and grouping common methods together.
+* When a module is included in a class, the class is searched before the module. But, the module is searched before the superclass. This order of precedence applies to all modules and classes in the inheritance hierarchy.
+  
+##### Modules and Namespacing  
 
-  ##### Modules and Namespacing  
-
-  * In this context, namespacing means organizing similar classes under a module. In other words, we'll use modules to group related classes.
-
+* In this context, namespacing means organizing similar classes under a module. In other words, we'll use modules to group related classes.
+  
   * One advantage of namespacing is that it makes it easy for us to recognize related classes in our code. 
-  * The second advantage is it reduces the likelihood of our classes colliding with other similarly named classes in our codebase.
-
-  ##### Modules as Containers (Module Methods)
+* The second advantage is it reduces the likelihood of our classes colliding with other similarly named classes in our codebase.
+  
+##### Modules as Containers (Module Methods)
 
   * This involves using modules to house other methods.
   * This is very useful for methods that seem out of place within your code.
@@ -159,9 +200,11 @@ Polymorphism is the process of using an operator or function in different ways f
 
 * Ruby has a distinct lookup path that it follows each time a method is called.
 * We can use the `ancestors` method on any class to find out the method lookup chain.  
-* The method lookup pat is the order in which classes are inspected when you call a method.
+* The method lookup path is the order in which classes are inspected when you call a method.
+* The method lookup path is the order in which Ruby will traverse the class hierarchy to look for methods to invoke.
 * The order in which we include modules is important. Ruby actually looks at the last module we included _first_. This means that in the rare occurrence that the modules we mix in contain a method with the same name, the last module included will be consulted first. 
 * Modules included in a superclass will also make it on to the method lookup path.
+* When a module is included in a class, the class is searched before the module. But, the module is searched before the superclass. This order of precedence applies to all modules and classes in the inheritance hierarchy.
 
 
 
@@ -178,3 +221,47 @@ Polymorphism is the process of using an operator or function in different ways f
   1. `self`, inside of an instance method, references the instance (object) that called the method--the calling object.
   2. `self`, outside of an instance method, references the class and can be used to define class methods.
 * So we can see that `self` is a way of being explicit about what our program is referencing and what our intentions are as far as behaviour. `self` changes depending on the scope it is used in, so pay attention to see if you're inside an instance method or not.
+
+---
+
+#### Reading OO code
+
+
+
+---
+
+#### Fake operators and equality
+
+* Fake operators, that is operators that are actually methods, can have their functionality overridden.
+
+###### Equality methods
+
+* One of the most common fake operators to be overridden is the `==` equality operator.
+* It's very useful to override this method, and doing so also gives us a `!=` method.
+* The original `--` method is defined in the `BasicObject` class, which is the parent class for _all_ classes in Ruby. This implies _every_ object in Ruby has a `==` method. However, each class should override the `==` method to specify the value to compare.
+* for most objects, the `==` operator compares the values of the objects, and is frequently used.
+* by default, `BasicObject#==` does not perform an equality check; instead, it returns true if two objects are the same object. This is why other classes often override the behaviour of `#==`.
+* If you need to compare custom objects, you should override the `==` method.
+* the `equal?` method goes one level deeper than `==` and determines whether two variables not only have the same value, but also whether they point to the same object.
+* do not override `equal?`.
+* calling `object_id` on an object will return the object's unique numerical value. Comparing two objects' `object_id` has the same effect as comparing them with `equal?`.
+* `===` is used implicitly in `case` statements.
+* like `==`, the `===` operator is actually a method.
+* you rarely need to call this method explicitly, and only need to implement it in your custom classes if you anticipate your objects will be used in `case` statements, which is probably pretty rare.
+
+---
+
+#### Truthiness
+
+
+
+---
+
+#### Working with collaborator objects
+
+* We can use any object to represent an object's state. Instance variables can be set to any object, even an object of a custom class we've created.  
+* Objects that are stored as state within another object are also called "collaborator objects". We call such objects collaborators because they work in conjunction (or in collaboration) with the class they are associated with. 
+* When we work with collaborator objects, they are usually custom objects (e.g. defined by the programmer and not inherited from the Ruby core library). Yet, collaborator objects aren't strictly custom objects. Even string objects can act as collaborator objects.
+* Collaborator objects play an important role in object oriented design, since they also represent the connections between various actors in your program. When working on an object oriented program be sure to consider what collaborators your classes will have and if those associations make sense, both from a technical standpoint and in terms of modeling the problem your program aims to solve.
+* When working with collaborator objects in your class, you may be working with strings, integers, arrays, hashes, or even custom objects. Collaborator objects allow you to chop up and modularize the problem domain into cohesive pieces; they are at the core of OO programming and play an important role in modeling complicated problem domains.
+* 
