@@ -118,7 +118,8 @@ Why do this? Why not just reference the `@name` instance variable, like we did b
 
 However, we have to beware that when calling getter or setter methods, we use clear syntax so that Ruby does not think we are calling or setting _local variables_. To disambiguate from creating a local variable, we sometimes need to prefix our getter- and setter-method calls with `self` to let Ruby know that we're calling a method.
 
-
+* It is standard practice to refer to instance variables inside the class without `@` if the getter method is available.
+* 
 
 
 
@@ -221,6 +222,7 @@ There are several ways to implement polymorphism.
   1. `self`, inside of an instance method, references the instance (object) that called the method--the calling object.
   2. `self`, outside of an instance method, references the class and can be used to define class methods.
 * So we can see that `self` is a way of being explicit about what our program is referencing and what our intentions are as far as behaviour. `self` changes depending on the scope it is used in, so pay attention to see if you're inside an instance method or not.
+* The Ruby style guide instructs that we "Avoid self where not required."
 
 ---
 
