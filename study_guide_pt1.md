@@ -51,6 +51,12 @@
 * If we only want the getter method without the setter method then we would want to use the `attr_reader` method. It works the same way but only allows you to retrieve the instance variable. And if you only want the setter method, you can use the `attr_writer` method.
 * All of the `attr_*` methods take a `Symbol` as parameters.
 
+---
+
+#### How to call getters and setters
+
+* When a setter is private: unlike all other private method calls, you _must_ specify the caller when calling a setter method.
+
 
 
 ---
@@ -90,8 +96,6 @@
 * A constant initialized in a super-class is inherited by the sub-class, and can be accessed by both class and instance methods.
 * Constants have _lexical scope_ which makes their scope resolution rules very unique compared to other variable types. If Ruby doesn't find the constant using lexical scope, it'll then look at the inheritance hierarchy.
 
-
-
 ---
 
 #### Referencing and setting instance variables vs. using getters and setters  
@@ -119,9 +123,6 @@ Why do this? Why not just reference the `@name` instance variable, like we did b
 However, we have to beware that when calling getter or setter methods, we use clear syntax so that Ruby does not think we are calling or setting _local variables_. To disambiguate from creating a local variable, we sometimes need to prefix our getter- and setter-method calls with `self` to let Ruby know that we're calling a method.
 
 * It is standard practice to refer to instance variables inside the class without `@` if the getter method is available.
-* 
-
-
 
 ---
 
@@ -158,8 +159,7 @@ There are several ways to implement polymorphism.
 * Inheritance is when a class inherits behaviour from another class. The class that is inheriting behaviour is called the subclass and the class it inherits from is called the superclass.
 * Ruby checks the object's class first for the method before it looks in the superclass.
 * Inheritance can be a great way to remove duplication in your code base. There is an acronym that you'll see often in the Ruby community, "DRY". This stands for "Don't Repeat Yourself". It means that if you find yourself writing the same logic over and over again in your programs, there are ways to extract that logic to one place for reuse.
-* Sub-classing from parent class. Can only sub-class from 1 parent; used to model hierarhcial relationships.
-* 
+* Sub-classing from parent class. Can only sub-class from 1 parent; used to model hierarchical relationships.
 
 ---
 
@@ -218,7 +218,7 @@ There are several ways to implement polymorphism.
 * We use `self` to specify a certain scope for our program. `self` can refer to different things depending on where it is used.
 * Here are at least two clear use cases for `self`: 1) use `self` when calling setter methods from within the class to allow Ruby to disambiguate between initializing a local variable and calling a setter method; and 2) use `self` for class method definitions.
 * From within the class, when an instance method calls `self`, it is returning the _calling object_.
-* So just be clear, from within a class...
+* So just to be clear, from within a class...
   1. `self`, inside of an instance method, references the instance (object) that called the method--the calling object.
   2. `self`, outside of an instance method, references the class and can be used to define class methods.
 * So we can see that `self` is a way of being explicit about what our program is referencing and what our intentions are as far as behaviour. `self` changes depending on the scope it is used in, so pay attention to see if you're inside an instance method or not.
@@ -240,7 +240,7 @@ There are several ways to implement polymorphism.
 
 * One of the most common fake operators to be overridden is the `==` equality operator.
 * It's very useful to override this method, and doing so also gives us a `!=` method.
-* The original `--` method is defined in the `BasicObject` class, which is the parent class for _all_ classes in Ruby. This implies _every_ object in Ruby has a `==` method. However, each class should override the `==` method to specify the value to compare.
+* The original `==` method is defined in the `BasicObject` class, which is the parent class for _all_ classes in Ruby. This implies _every_ object in Ruby has a `==` method. However, each class should override the `==` method to specify the value to compare.
 * for most objects, the `==` operator compares the values of the objects, and is frequently used.
 * by default, `BasicObject#==` does not perform an equality check; instead, it returns true if two objects are the same object. This is why other classes often override the behaviour of `#==`.
 * If you need to compare custom objects, you should override the `==` method.
@@ -266,4 +266,3 @@ There are several ways to implement polymorphism.
 * When we work with collaborator objects, they are usually custom objects (e.g. defined by the programmer and not inherited from the Ruby core library). Yet, collaborator objects aren't strictly custom objects. Even string objects can act as collaborator objects.
 * Collaborator objects play an important role in object oriented design, since they also represent the connections between various actors in your program. When working on an object oriented program be sure to consider what collaborators your classes will have and if those associations make sense, both from a technical standpoint and in terms of modeling the problem your program aims to solve.
 * When working with collaborator objects in your class, you may be working with strings, integers, arrays, hashes, or even custom objects. Collaborator objects allow you to chop up and modularize the problem domain into cohesive pieces; they are at the core of OO programming and play an important role in modeling complicated problem domains.
-* 
