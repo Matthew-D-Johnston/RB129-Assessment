@@ -1,10 +1,12 @@
-#### Classes and Objects in Ruby: a Purely Platonic Relationship
+#### Towards a Conceptual Model of Classes and Objects in Ruby: resolving the problem of "the One and the Many"
 
-Classes and objects in Ruby are intimately related, but it's more of a spiritual relation than it is physical. It helps to have Plato's Theory of Forms in mind when thinking about classes and objects in Ruby. The Theory of Forms is an answer to the problem of universals and particulars, or the problem of the "One and the Many". The question is how can we use a term like "Dog" and make it applicable to so many different beings in the world (i.e. "Chihuahuas", "St. Bernards", "Pugs", etc.). There must be some universal essence that unites these different beings; that universal essence is what Plato labels Form.   
+How is that we are able to use a term like "dog" and make it applicable to so many different beings in the world? We've got chihuahuas, pugs, poodles, golden retrievers, mastiffs, and the list goes on. Is there some universal essence that allows us to group certain paricular beings together into one distinct category? 
 
-Without pushing the analogy too far (because this post is about Object Oriented Programming and Ruby, not Plato's philosophy), we shall treat Ruby classes as universal forms and objects as particular beings. A class defines an essence that predetermines the particular objects instantiated from that class; more specifically, a class defines the behaviours and attributes (LS, OOP book) that govern what any particular object is capable of doing and the purview of any particular object's state. Both behaviours and attributes are defined within a class, but before any object is created, or instantiated, the behaviours and attributes exist only _in potentia_; that is, they exist as formal essential possibilities rather than as substantive particular realities. And in this case, contra the existentialists, _essence precedes existence_.  
+This problem of universals and particulars, also known as the problem of "the One and the Many", is not a new one. Plato was asking the same question thousands of years ago. He came up with a whole theory about it, a theory we refer to as Plato's Theory of the Forms. Plato, of course, wouldn't have the last word on the matter, and the question still plagues computer programmers today, especially in relation to Object Oriented Programming. The Ruby programming language has its own answer to the question of universals and particulars and the rest of this post will be an initial attempt at beginning to build a conceptual model around how Ruby resolves that question. 
 
-Below is a visual schema of the relationship between classes and objects. Have a look, but don't get drowned in the details just yet. The rest of our discussion will be concerned with explaining this schema in more detail. Refer back to it often.    
+We can think of Ruby classes as universal forms and Ruby objects as particular beings. A class defines an essence that predetermines or prefigures the particular objects instantiated from that class; more specifically, a class defines the behaviours and attributes (LS, OOP book) that govern what any particular object is capable of doing and the purview of any particular object's state. Both behaviours and attributes are defined within a class, but before any object is created, or instantiated, the behaviours and attributes exist only _in potentia_; that is, they exist as formal essential possibilities rather than as substantive particular realities. And in this case, contra the existentialists, _essence precedes existence_.  
+
+Below is a visual schema of the relationship between classes and objects. Have a look, but don't get drowned in the details just yet. The rest of our discussion will be concerned with explaining this schema in more detail. Refer back to it as desired.
 
 **[insert class and object diagram here]**
 
@@ -14,7 +16,7 @@ Below is a visual schema of the relationship between classes and objects. Have a
 
 Let's start with classes. As previously mentioned, attributes and behaviours are defined within a class. The combination of these attributes and behaviours comprise the universal essence inhering to every instance, or object, of the class. For their must be some universal properties inhering within every Chihuahua, St. Bernard, and Pug that enables us to refer to each one of them as a dog.
 
-Let's start with an example. Below, we define a `Robot` class, in which we define the essence of what it is to be a 'Robot'. In the simple case outlined below, a 'Robot' has the ability to 'talk' (behaviour) and has a 'name' attribute. 
+Let's start with an example. Below, we define a `Robot` class, in which we outline the essence of what it is to be a 'Robot'. In the simple case outlined below, a 'Robot' has the ability to 'talk' (behaviour) and has a 'name' attribute. 
 
 ```ruby
 # Class Definition -- Formal Essence
