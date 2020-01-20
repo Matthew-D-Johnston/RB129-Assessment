@@ -1,10 +1,12 @@
 #### Towards a Conceptual Model of Classes and Objects in Ruby: resolving the problem of "the One and the Many"
 
-How is that we are able to use a term like "dog" and make it applicable to so many different beings in the world? We've got chihuahuas, pugs, poodles, golden retrievers, mastiffs, and the list goes on. Is there some universal essence that allows us to group certain paricular beings together into one distinct category? 
+How is that we are able to use a term like "dog" and make it applicable to so many different beings in the world? We've got chihuahuas, pugs, poodles, golden retrievers, mastiffs, and the list goes on. Is there some universal essence that allows us to group certain particular beings together into one distinct category? 
 
-This problem of universals and particulars, also known as the problem of "the One and the Many", is not a new one. Plato was asking the same question thousands of years ago. He came up with a whole theory about it, a theory we refer to as Plato's Theory of the Forms. Plato, of course, wouldn't have the last word on the matter, and the question still plagues computer programmers today, especially in relation to Object Oriented Programming. The Ruby programming language has its own answer to the question of universals and particulars and the rest of this post will be an initial attempt at beginning to build a conceptual model around how Ruby resolves that question. 
+This problem of _universals_ and _particulars_, also known as the problem of "the One and the Many", is not a new one. Plato was asking the same question thousands of years ago. He came up with a whole theory about it, a theory we refer to as Plato's Theory of the Forms. Plato, of course, wouldn't have the last word on the matter, and today, computer programmers still grapple with the problem. One solution they have come up with is Object Oriented Programming (OOP). We're going to discuss the OOP paradigm within the context of the Ruby programming language, focussing especially on how to think and talk about Ruby classes and Ruby objects. Consider this an initial attempt from a still nascent computer programmer at trying to conceptualize the relationship between classes and objects.
 
-We can think of Ruby classes as universal forms and Ruby objects as particular beings. A class defines an essence that predetermines or prefigures the particular objects instantiated from that class; more specifically, a class defines the behaviours and attributes (LS, OOP book) that govern what any particular object is capable of doing and the purview of any particular object's state. Both behaviours and attributes are defined within a class, but before any object is created, or instantiated, the behaviours and attributes exist only _in potentia_; that is, they exist as formal essential possibilities rather than as substantive particular realities. And in this case, contra the existentialists, _essence precedes existence_.  
+Let's begin by thinking of Ruby classes as universal forms and Ruby objects as particular beings. A class defines an essence that predetermines or prefigures the particular objects instantiated from that class; more specifically, a class defines the _behaviours_ and _attributes_ (LS, OOP book) that govern what any particular object is capable of doing and the purview of any particular object's _state_ (the italicized words are emphasized because they are semantically loaded terms within the OOP paradigm, at least Ruby's implementation of it).  
+
+Both behaviours and attributes are defined within a class, but before any object is created, or instantiated, the behaviours and attributes exist only _in potentia_; that is, they exist as formal essential possibilities rather than as substantive particular realities. And in this case, contra the existentialists, _essence precedes existence_.  
 
 Below is a visual schema of the relationship between classes and objects. Have a look, but don't get drowned in the details just yet. The rest of our discussion will be concerned with explaining this schema in more detail. Refer back to it as desired.
 
@@ -14,15 +16,15 @@ Below is a visual schema of the relationship between classes and objects. Have a
 
 ###### Class (Formal Essence)
 
-Let's start with classes. As previously mentioned, attributes and behaviours are defined within a class. The combination of these attributes and behaviours comprise the universal essence inhering to every instance, or object, of the class. For their must be some universal properties inhering within every Chihuahua, St. Bernard, and Pug that enables us to refer to each one of them as a dog.
+As previously mentioned, attributes and behaviours are defined within a class. The combination of these attributes and behaviours comprise the universal essence inhering to every instance, or object, of the class. Just as we might assume that there must be some universal properties inhering within every Chihuahua, St. Bernard, and Pug that enables us to refer to each one of them as a dog, a class is what defines that essence within the context of the Ruby programming language.
 
-Let's start with an example. Below, we define a `Robot` class, in which we outline the essence of what it is to be a 'Robot'. In the simple case outlined below, a 'Robot' has the ability to 'talk' (behaviour) and has a 'name' attribute. 
+Let's start with an example. Below, we define a `Robot` class, in which we outline the essence of what it is to be a Robot object. In the simple case outlined below, a Robot object has the ability to 'talk' (behaviour) and has a 'name' attribute. 
 
 ```ruby
 # Class Definition -- Formal Essence
 
 class Robot
-  def initialize(name) # Constructor method: invoked whenever we instantiate a new object.
+  def initialize(name) 
     @name = name   		 # Here, we define a 'name' attribute within the class.
   end
   
@@ -32,11 +34,11 @@ class Robot
 end 
 ```
 
-The attribute and behaviour we have defined above within the `Robot` class work to make up the universal essence of every 'Robot' object. Every 'Robot' object instantiated from the `Robot` class will be unique, but it we know it's a 'Robot' because of this universal essence.
+The attribute and behaviour we have defined above within the `Robot` class work to make up the universal essence of every 'Robot' object. Every 'Robot' object instantiated from the `Robot` class will be unique, but it we know it's a 'Robot' because of this universal essence. Currently, that essence consists of a 'name' attribute, which will predetermine that every object of the `Robot` class has an `@name` instance variable, and a 'talk' behaviour, which predetermines that every object of the `Robot` class will have a `talk` instance method.
 
 ###### Object (Substantive Existence)  
 
-An object, or instance, is a paricular instantiation of a class. For example, we can instantiate one, or any number of 'Robot' objects from our `Robot` class.
+An object, or instance, is a particular instantiation of a class. For example, we can instantiate one, or any number of 'Robot' objects from our `Robot` class. Below we instantiate two.
 
 ```ruby
 # Object Instantiation -- Particular Existence
@@ -45,9 +47,9 @@ r2d2 = Robot.new("R2D2")
 c3p0 = Robot.new("C3P0")
 ```
 
-Notice that because we defined the `initialize` constructor method with a `name` parameter we must pass an argument to the `new` method when we call it on our `Robot` class in order to instantiate a new 'Robot' object. 
+Notice that because we defined the `initialize` constructor method with a `name` parameter we must pass an argument to the `new` method when we call it on our `Robot` class in order to instantiate a new Robot object. 
 
-Each of the 'Robot' objects instantiated above are unique, each having its own unique object id.
+Each of the Robot objects instantiated above are unique, each having its own unique object id, which we can reveal by calling the `object_id` method on each one our objects.
 
 ```ruby
 r2d2.object_id
@@ -56,9 +58,9 @@ c3p0.object_id
 # => 70218315588860
 ```
 
-Upon instantiation, each object also generates its own unique state. By state, we mean the collection of all the instance variables belonging to the object. In the case of our 'Robot' objects above, for each object there is only one instance variable, `@name`. Thus, the collection of the instance variables for each of our 'Robot' objects is accounted for by each object's respective `@name` instance variable.
+Upon instantiation, each object also generates its own unique state. By state, we mean the collection of all the instance variables belonging to the object. In the case of our Robot objects above, for each object there is only one instance variable, `@name`. Thus, the collection of the instance variables for each of our Robot objects is accounted for by each object's respective `@name` instance variable.
 
-Instance variables keep track of an object's state (LS OOP book). More precisely, instance variables keep track of information about an object's state (LS OOP book). For instance, the `@name` instance variable belonging to our `r2d2` 'Robot' object references the value `"R2D2"`. This piece of data or information is what comprises the state of an object, and is what the `@name` instance variable is tracking. It is unique from the values associated with the `@name` instance variable belonging to our other 'Robot' object, `c3p0`.
+Instance variables keep track of an object's state (LS OOP book). More precisely, instance variables keep track of information about an object's state (LS OOP book). For instance, the `@name` instance variable belonging to our `r2d2` Robot object references the value `"R2D2"`. This piece of data or information is what comprises the state of an object, and is what the `@name` instance variable is tracking. It is unique from the values associated with the `@name` instance variable belonging to our other Robot object, `c3p0`.
 
 ```ruby
 p r2d2
@@ -67,38 +69,38 @@ p c3p0
 # => #<Robot:0x00007fb9f383c9f8 @name="C3P0">
 ```
 
-Above, we've called the `p` method on both of our 'Robot' objects, which returns a value containing the name of the class, an encoding of the object id, and the value associated with each object's respective `@name` instance variable. As we can see, each object's respective `@name` instance variable is associated with a different value, evidence that each object has its own unique state. 
+Above, we've called the `p` method on both of our Robot objects, which returns a value containing the name of the class, an encoding of the object id, and the value associated with each object's respective `@name` instance variable. As we can see, each object's respective `@name` instance variable is associated with a different value, evidence that each object has its own unique state. 
 
-Indeed, we can even say that objects encapsulate state (somewhere from LS). For example, we currently have no direct access to the `@name` instance variable and the value it references for any of our 'Robot' objects. We can neither expose it nor manipulate it. It is untouchable, or private. We might try to access it and expose it by doing something like the following...
+Indeed, we can even say that objects encapsulate state (somewhere from LS). For example, we currently have no direct access to the `@name` instance variable and the value it references for any of our Robot objects. We can neither expose it nor manipulate it. It is untouchable, or private. We might try to access it and expose it by doing something like the following...
 
 ```ruby
 r2d2.name
 ```
 
-...but instead of the `r2d2` object exposing its `@name` to us, we instead get the following error...
+…but instead of the `r2d2` object allowing the value referenced by its `@name` instance variable to be exposed, we get the following error...
 
 ```ruby
 # => NoMethodError: undefined method `name' for #<Robot:0x00007ff7900f5c28 @name="R2D2">
 ```
 
-Hmmmm....an undefined method error. Perhaps, we should now turn to discussing behaviour and attributes, which are defined within a class and which comprise the formal essence of any particular object.
+Hmmmm....an undefined method error. Now might be a good time to turn to discussing behaviour and attributes, which are defined within a class and which comprise the formal essence of any particular object.
 
 ##### Behaviour, Attributes, and their Corresponding Instances
 
 ###### Behaviour and Instance Methods
 
-Behaviours defined in a Ruby class predetermine what any individual object of that class is capable of doing. Now, it's important here to realize that any particular object in question is not strictly limited to the behaviours of its class; it may also perform behaviours defined in any of the superclasses within its inheritance hierarchy as well as any modules that have been mixed into its class or into the rest of the inheritance hierarchy.  
+Behaviours defined in a Ruby class predetermine what any individual object of that class is capable of doing. It's important here to realize that any particular object in question is not strictly limited to the behaviours of its class; it may also perform behaviours defined in any of the superclasses within its inheritance hierarchy as well as any mixed-in modules.  
 
-If we invoke the `ancestors` method on our `Robot` class, the an array whose elements consist of the various classes and modules that comprise the _method lookup path_ of our `Robot` class will be returned.  
+If we invoke the `ancestors` method on our `Robot` class, an array, whose elements consist of the various classes and modules that comprise the _method lookup path_ of our `Robot` class, will be returned.  
 
 ```ruby
 Robot.ancestors
 # => [Robot, Object, Kernel, BasicObject] 
 ```
 
-This method lookup path is the path our program will traverse when looking for any instance method called on an object of the `Robot` class. If a behaviour is defined in any of the classes/modules along that path, then the instance method corresponding to that behaviour will be accessible to objects of the `Robot` class. In this sense, we might think of instance methods as _instances_ of the behaviours defined in either the class or somewhere within its class inheritance hierarchy.  
+This method lookup path is the path our program will traverse when looking for any instance method called on an object of the `Robot` class. The `Robot` class, being the first in the list, will be searched first, followed by the `Object` class, the `Kernel` module, and finally, the `BasicObject` superclass. If a behaviour is defined in any of the classes/modules along that path, then the instance method corresponding to that behaviour will be accessible to objects of the `Robot` class. In this sense, we might think of instance methods as _instances_ of the behaviours defined in either the class or somewhere within its class inheritance hierarchy.  
 
-Let's invoke the `talk` instance method on our 'Robot' objects in order to expose the 'talk' behaviour defined in our `Robot` class.
+Let's invoke the `talk` instance method on our Robot objects in order to expose the 'talk' behaviour defined in our `Robot` class.
 
 ```ruby
 r2d2.talk
@@ -107,78 +109,78 @@ c3p0.talk
 # => I'm a robot, and I can talk.
 ```
 
-Each invocation of the `talk` method on each of the two distinct 'Robot' objects outputs the same message to the screen: `I'm a robot, and I can talk.`. The message itself is irrelevant to our discussion, and indeed, we could have defined the 'talk' behaviour to do any number of things. The important part here is to realize that each of our 'Robot' objects is only capable of performing the specified behaviour when the `talk` instance method is invoked because we have already defined that behaviour within our `Robot` class--essence precedes existence.
+Invoking the `talk` method on each of the two distinct Robot objects outputs the same message to the screen: `I'm a robot, and I can talk.`. The message itself is irrelevant to our discussion, and indeed, we could have defined the 'talk' behaviour to do any number of things. The important part here is to realize that each of our Robot objects is only capable of performing the specified behaviour when the `talk` instance method is invoked because we have already defined that behaviour within our `Robot` class--essence precedes existence.
 
 That's enough about behaviour for now. We will continue to talk about behaviours throughout the rest of the discussion but let's turn to the other aspect of essence as defined by class--attributes.    
 
 ###### Attributes and Instance Variables
 
-Attributes have one necessary property and two contingent properties. The main property is a _necessary_ property, whereas the two sub-properties are _contingent_; that is, you cannot define an attribute without the main property being inherent to that definition, but you can define an attribute without the two sub-properties.  
+Attributes have one _necessary_ property and two _contingent_ properties. You cannot define an attribute without the necessary property being inherent to that definition, but you can define an attribute without the two contingent properties.  
 
-**Necessary Property**
+**The Necessary Property**
 
-The main property of any attribute is that it predetermines the state of any particular object. Every object's state derives its universal form or essence from the attributes defined in the object's class and any superclasses within the inheritance hierarchy. Thus, an object's state must, and indeed does, track the attributes defined in the object's class (LS OOP book) and class inheritance hierarchy. This means that an object can only possess instance variables that have been predetermined by the attributes defined within its respective class and superclasses.
+The necessary property of any attribute is the function of predetermining the state of any particular object. Every object's state derives its universal form or essence from the attributes defined in the object's class and any superclasses within the inheritance hierarchy. Thus, an object's state must, and indeed does, track the attributes defined in the object's class (LS OOP book) and class inheritance hierarchy. This means that an object can only possess instance variables that have been predetermined by the attributes defined within its respective class and superclasses.
 
-There can be no _instance_ of an attribute without that attribute already being defined--essence precedes existence. This suggests that we should  think of instance variables as _instances_ of attributes defined in the class, similar to how we can view instance methods as _instances_ of behaviours defined in the class.  
+There can be no _instance_ of an attribute without that attribute already being defined--essence precedes existence. This suggests that we should  think of instance variables as _instances_ of attributes defined in the class, similar to how we can view instance methods as _instances_ of behaviours defined in the class, and of course, instances (or objects) are just instances of the class itself.  
 
-This leads to a very important and perhaps controversial point concerning ostensible variables whose names start with `@`. For example, in our `Robot` class definition above, we have `@name`. It would appear that we are dealing with an instance variable, but appearances can be deceiving. Here's what David Flanagan and Yukihiro Matsumoto have to say in their book _The Ruby Programming Language_: "All Ruby objects have a set of instance variables. These are not defined by the object's class--they are simply created when a value is assigned to them." Classes don't define instance variables, they define attributes. Instance variables do not exist prior to an object being created and a value being assigned to them. 
+This leads to a very important and perhaps controversial point concerning ostensible variables whose names start with `@`. For example, in our `Robot` class definition above, we have `@name`. It would appear that we are dealing with an instance variable, but appearances can be deceiving. Here's what David Flanagan and Yukihiro Matsumoto have to say about instance variables in their book _The Ruby Programming Language_: "All Ruby objects have a set of instance variables. These are not defined by the object's class--they are simply created when a value is assigned to them." Classes don't define instance variables, they define attributes. Instance variables do not exist prior to an object being created and a value being assigned to them. 
 
-The distinction between attributes and instance variables is important because it can be tempting to use the term 'attribute' and 'instance variable' interchangeably. This fine so long as one keeps the distinction between what the class is doing and what the object is doing. If one is aiming for clarity, it might be best to speak of `@name` as an instance variable within the context of its belonging to a particular object, and to speak of `@name` as the main defining property of an attribute within the context of class definition. Within our `Robot` class definition, the presence of `@name` will predetermine the existence of an `@name` instance variable inhering to every object of the `Robot` class. Evidently, context matters.
+The distinction between attributes and instance variables is important because it can be tempting to use the term 'attribute' and 'instance variable' interchangeably. This is fine so long as one keeps the distinction between what a class is and how it functions and what an object is and how it functions. If one is aiming for clarity, it might be best to speak of `@name` as an instance variable within the context of its belonging to a particular object, and to speak of `@name` as an _attribute signifier_ within the context of class definition. Within our `Robot` class definition, the presence of an `@name` attribute signifier will predetermine the existence of an `@name` instance variable inhering to every object of the `Robot` class. Evidently, context matters.
 
-The fact that context matters really shouldn't be all that controversial. The Ruby programming language itself has no absolute sovereign authority over the use of the arobase sign, `@`. In English, at least, it's a supplement for "at", and it's used as a prefix for Instagram handles by people who have no clue what an instance variable is (imagine we started to call them Instagram instance variables). Thus, to speak of `@name` as an attribute within the context of class definition and as an instance variable within the context of any particular object of the class shouldn't be that problematic. Having said that, to avoid ambiguity in the rest of this post, we will reserve the `@` when prepended to a variable name for instance variables and refer to attributes using single quotations, ' '. 
+The fact that context matters really shouldn't be all that controversial. The Ruby programming language itself has no absolute sovereign authority over the use of the arobase sign, `@`. In the English language, at least, it's a substitute for "at", and it's used as a prefix for Instagram handles by people who have no clue what an instance variable is (imagine we started to call them Instagram instance variables). Thus, to speak of `@name` as an attribute signifier within the context of class definition and as an instance variable within the context of any particular object of the class shouldn't be that problematic.  
 
 **Contingent Properties**
 
-The two contingent sub-properties of attributes are both behaviours, which means that there is some overlap between attributes and behaviours (we will explain this in more depth further below). These two sub-properties correspond to the two types of Ruby accessor methods: 1) getter methods and 2) setter methods. To illustrate what we mean by getter and setter methods, let's define one of each within our `Robot` class.
+The two contingent properties of attributes are both behaviours, which means that there is some overlap between attributes and behaviours (we will explain this in more depth further below). These two  contingent properties correspond to the two types of Ruby accessor methods: 1) getter methods and 2) setter methods. To illustrate what we mean by getter and setter methods, let's define one of each within our `Robot` class.
 
 ```ruby
 class Robot
   # ... rest of code omitted for brevity
   
-  def name	# Here, we define a getter method.
+  def name	# Here, we define a behaviour corresponding to a getter method.
     @name
   end
   
-  def name=(name)  # Here, we define a setter method.
+  def name=(name)  # Here, we define a behaviour corresponding to a setter method.
     @name = name
   end
 end
 ```
 
-Both the getter and setter method defined above look like behaviours, and they are. But they are also attributes; or more specifically, they are sub-properties of our 'name' attribute. Each sub-property is contingent, and although we can define either one without an attribute already being defined, once either one of them is defined, the attribute is also defined.
+Both the getter and setter method defined above look like behaviours, and as already mentioned above, they are. But they are also attributes; or more specifically, they are contingent properties of our 'name' attribute. Each property is contingent, and although we can define either one without an attribute already being defined, once either one of them is defined, the attribute is necessarily defined.
 
-For example, let's completely redefine our `Robot` class without the `initialize` constructor method but with a `name` getter method.
+For example, let's completely redefine our `Robot` class without the `initialize` constructor method but with a behaviour corresponding to a `name` getter method.
 
 ```ruby
 class Robot
   def name
-    @name			# Here, we define a 'name' attribute with a sub-property.
+    @name			# Here, we define a 'name' attribute with a contingent, behavioural property.
   end
   
-  def talk	  # Here, we define a 'talk' behaviour within the class.
+  def talk
     puts "I'm a robot, and I can talk."
   end
 end 
 ```
 
-Again, it may appear that we have simply defined two behaviours within our class. But the first behaviour, the `name` getter method, is also an attribute, because it contains a line of code that satisfies the main property of any attribute. The state of any object of the `Robot` class will be predetermined by the 'name' attribute defined therein, so that the totality of the state of any 'Robot' object will consist of an `@name` instance variable.
+Again, it may appear that we have simply defined two behaviours within our class. But the first behaviour, the `name` getter-method definition, is also an attribute, because it contains a line of code that satisfies the necessary property of any attribute. The state of any object of the `Robot` class will be predetermined by the 'name' attribute defined therein, so that the totality of the state of any Robot object will consist of an `@name` instance variable.
 
-What is special about this 'name' attribute that distinguishes it from the 'name' attribute we defined in our first definition of the `Robot` class, is that this 'name' attribute has a behavioural sub-property of being able to be publicly exposed. Rember that when we tried to expose the value associated with our `@name` instance variable for the `r2d2` 'Robot' by appending that object with `name` above, an "undefined method" error message was returned. But with a `name` getter method, we are able to directly access the object's `@name` instance variable and expose the value associated with it.
+What is special about this 'name' attribute that distinguishes it from the 'name' attribute we defined in our first definition of the `Robot` class, is that this 'name' attribute has the behavioural property of being able to be publicly exposed. Remember that when we tried to expose the value associated with our `@name` instance variable for the `r2d2` Robot object by appending that object with `name` above, an "undefined method" error message was returned. But with a `name` getter method, we are able to directly access the object's `@name` instance variable and expose the value associated with it.
 
-Similarly, if we were to add a `name` setter method to the definition of our `Robot` class, we would also be able to access any 'Robot' object's `@name` instance variable and change its value. Let's add a setter and getter method to our initial `Robot` class in order to play around with a few examples.
+Similarly, if we were to add a `name` setter-method definition to the definition of our `Robot` class, we would also be able to access any Robot object's `@name` instance variable and change its value. Let's add a setter- and getter-method definition to our initial `Robot` class in order to play around with a few examples.
 
 ```ruby
 class Robot
   def initialize(name) # Constructor method: invoked whenever we instantiate a new object.
-    @name = name   		# Here, we declare the main property for a 'name' attribute.
+    @name = name   		# Here, we define an attribute signifier for a 'name' attribute.
   end
   
-  def name		# Here, we are adding a 'getting' sub-property to our 'name' attribute.
-    @name			# Once, again we are declaring the main property for a 'name' attribute.
+  def name		# Here, we are adding a 'getting' behaviour to our 'name' attribute.
+    @name			# The 'getting' behaviour is a contingent property of the attribute.
   end
   
-  def name=(name) # Here, we are adding a 'setting' sub-property to our 'name' attribute.
-    @name = name  # Once, again we are declaring the main property for a 'name' attribute.
+  def name=(name) # Here, we are adding a 'setting' behaviour to our 'name' attribute.
+    @name = name  # The 'setting' behaviour is a contingent property of the attribute.
   end
   
   def talk		# Here, we define a 'talk' behaviour within the class.
@@ -187,7 +189,7 @@ class Robot
 end 
 ```
 
-Let's test them out with one of our 'Robot' objects.
+Let's test them out with one of our Robot objects.
 
 ```ruby
 c3p0.name
@@ -199,14 +201,14 @@ c3p0.name
 
 Success! We are able to both expose and change the value associated with the `c3p0` object's `@name` instance variable. 
 
-Getter and setter methods are so common that Ruby has a built-in way of defining them within the class. We can use `attr_reader` to define a getter method, `attr_writer` to define a setter method, or `attr_accessor` to simultaneously define a getter and setter method. Each of these methods take a symbol as an argument. Here's what our code would look like if we replaced our `name` getter method and `name=` setter method with a single `attr_accessor` method.
+Getter and setter methods are so common that Ruby has a built-in way of defining them within the class. We can use `attr_reader` to define a getter method, `attr_writer` to define a setter method, or `attr_accessor` to simultaneously define a getter and setter method. Each of these methods take a symbol as an argument. Here's what our code would look like if we replaced our `name` getter-method and `name=` setter-method definitions with a single `attr_accessor`.
 
 ```ruby
 class Robot
   attr_accessor :name
   
   def initialize(name) # Constructor method: invoked whenever we instantiate a new object.
-    @name = name   		# Here, we declare the main property for a 'name' attribute.
+    @name = name   		# Here, we define an attribute signifier for a 'name' attribute.
   end
   
   def talk		# Here, we define a 'talk' behaviour within the class.
@@ -215,7 +217,7 @@ class Robot
 end 
 ```
 
-We haven't lost any functionality...
+And we haven't lost any functionality...
 
 ```ruby
 c3p0.name
@@ -227,24 +229,24 @@ c3p0.name
 
 ...as we are able to expose and change the value associated with our `c3p0` object's `@name` instance variable.  
 
-But we need to reiterate why it is that we are treating these two behaviours as sub-properties of our 'name' attribute and not just independent behaviours. The reason has to do with the Object Oriented Programming paradigm and one of its primary goals--_encapsulation_.
+But we need to reiterate why it is that we are treating these two behaviours as contingent properties of our 'name' attribute and not just independent behaviours. The reason has to do with the Object Oriented Programming paradigm and one of its primary goals--_encapsulation_.
 
 ##### Encapsulation
 
-It might help to think about Ruby local variables here. Suppose we just create a local variable with the name `robot_name` and assign it to the value `"Buzz"`.
+It might help to think about Ruby local variables here. Suppose we initialize a local variable with the name `robot_name` and assign it to the value `"Buzz"`.
 
 ```ruby
 robot_name = "Buzz"
 ```
 
-Notice what happens when we invoke this local variable.
+Notice what happens when we try to return the value referenced by this local variable.
 
 ```ruby
 robot_name
 # => "Buzz"
 ```
 
-That's what we expected. What about if we try to change the value associated with the `robot_name` local variable by reassigning it to a new value?
+We get what we wanted. What about if we try to change the value associated with the `robot_name` local variable by reassigning it to a new value?
 
 ```ruby
 robot_name = "Fuzz"
@@ -252,11 +254,13 @@ robot_name
 # => "Fuzz"
 ```
 
-Again, that's what we expected. But notice how we were able to access our local variable, expose it and change it, and all without giving these processes a second thought. It's as if we take these behavioural properties of being able to expose and change the local variable's value for granted, as if those properties are inherent to the very essence of being a local variable. This is not the case for instance variables. The flexibility that belongs to instance variables, allowing them to preclude these behaviours, is precisely the precondition for encapsulation.
+Again, we get just what we wanted. But notice how we were able to access our local variable, expose it and change it, and all without giving these processes a second thought. It's as if we take these behavioural properties of being able to expose and change the local variable's value for granted, as if those properties are inherent to the very essence of being a local variable. This is not the case for instance variables. The flexibility that belongs to instance variables, allowing them to preclude such behaviours, is precisely the precondition for encapsulation.
 
-Encapsulation is a form of data protection that allows programmers to hide functionality from the rest of the code base (LS OOP book somewhere). When we define an attribute within a class, we have the flexibilty to decide what sorts of properties will belong to it.  Once decided, those properties will predetermine the level of access available outside of the class; that is, whether the values associated with instance variables are able to be accessed will be predetermined by how we define the attributes within the class.
+Encapsulation is a form of data protection that allows programmers to hide functionality from the rest of the code base (LS OOP book somewhere). When we define an attribute within a class, we have the flexibilty to decide what sorts of properties will belong to it.  Once decided, those properties will predetermine the level of access available to the rest of the code base outside of the class; that is, whether the values associated with instance variables are able to be exposed or changed will be predetermined by how we define the attributes within the class.
 
-##### A Note on State and its Tracking of Attributes
+[Image depicting differences between local variables and instance variables]
+
+##### A Note on State and Attribute Tracking
 
 We claimed above that an object's state tracks the attributes defined within the object's class. We want to explain that idea in a little more depth here. Let's use our last definition of the `Robot` class.
 
@@ -280,7 +284,9 @@ Now let's create a new instance, or object, of the `Robot` class.
 alexa = Robot.new("Alexa")
 ```
 
-If we invoke the `p` method on our `alexa` 'Robot' object, the following is returned...
+[insert image of robot object]
+
+If we invoke the `p` method on our `alexa` Robot object, the following is returned...
 
 ```ruby
 p alexa
@@ -289,7 +295,7 @@ p alexa
 
 Thus, we can see that our `alexa` object has an `@name` instance variable associated with the value `"Alexa"`. That instance variable is keeping track of our object's state, but our state is tracking the attributes defined in the class for our object. Let's explain.
 
-Suppose that we wanted all 'Robot' objects of the `Robot` class to have the potential to posses musical abilities. Without performing any action on individual 'Robot' objects themselves, we can simply define a 'musical' attribute within our `Robot` class and the state of every existing instance, or object, of the `Robot` class, will now be tracking this attribute. Let's add it, and we will make sure to give it the two behavioural sub-properties of being able to be exposed and changed.
+Suppose that we wanted all Robot objects of the `Robot` class to have the potential to posses musical abilities. Without performing any action on individual Robot objects themselves, we can simply define a 'musical' attribute within our `Robot` class and the state of every existing instance, or object, of the `Robot` class, will now be tracking this attribute. Let's add it, and we will make sure to give it the two contingent behavioural properties of being able to be exposed and changed.
 
 ```ruby
 class Robot
@@ -305,7 +311,7 @@ class Robot
 end 
 ```
 
-Without instantiating any new 'Robot' object, let's see what happens when we call the `p` method again on our `alexa` object.
+Without instantiating any new Robot object, let's see what happens when we call the `p` method again on our `alexa` object.
 
 ```ruby
 p alexa
@@ -319,13 +325,15 @@ alexa.musical
 # => nil
 ```
 
-The return value of `nil` may seem uninteresting since we have not yet assigned a value to any `@musical` instance variable. However, this little example is immensely significant, for it demonstrates that somehow, something pertaining to our `alexa` object is aware that something like a 'musical' attribute exists. That something is the object's state. The state is keeping track of all of the attributes defined within the class. If it wasn't, we should expect `alexa.musical` to return some error message.
+The return value of `nil` may seem uninteresting since we have not yet assigned a value to any `@musical` instance variable. However, this little example has tremendous significance, for it demonstrates that somehow, something pertaining to our `alexa` object is aware that something like a 'musical' attribute exists. That something is the object's state. The state is keeping track of all the attributes defined within the class. If it wasn't, we should expect `alexa.musical` to return some error message instead of `nil`.
 
-Now, this example leads to another important point that needs to be made. The reason that our invocation of the `p` method on `alexa` did not produce any indication of a 'musical' attribute nor a corresponding `@musical` instance variable, is that the `@musical` variable is as of yet, uninitialized. All uninitialized instance variables reference `nil`. The `@musical` instance variable has a certain shadowy existence at this point. It is not non-existent, but its existence is a kind of null existence, or 'nil' existence.
+This example suggests another important point that needs to be made. The reason that our invocation of the `p` method on `alexa` did not produce any indication of a 'musical' attribute nor a corresponding `@musical` instance variable, is that the `@musical` variable is as of yet, uninitialized. All uninitialized instance variables reference `nil`. The `@musical` instance variable has a certain shadowy existence at this point. It is not non-existent, but its existence is a kind of null existence, or 'nil' existence.
 
-To bring the example to life a little bit, let's suppose that we have a robot named Alexa and Alexa has been created with the potential for musical abilities. Currently, Alexa does not play any instrument, nor does she sing, but she has latent musical abilities that exist _in potentia_. Her musical abilities do not have a positive existence. Her musical abilities are not nothing, as they would be say for a rock, but they do have a kind of null, or nil, existence (to speak of musical abilities of a rock would be to speak nonsense). 
+To bring the example to life a little bit, let's suppose that we have a robot named Alexa and Alexa has been created with the potential for musical abilities. Currently, Alexa does not play any instrument, nor does she sing, but she has latent musical abilities that exist _in potentia_. Her musical abilities do not have a positive existence. Her musical abilities are not nothing, as they would be say for a rock, but they do have a kind of null, or nil, existence (to speak of the musical abilities of a rock would be to speak nonsense). Even in the world of numbers, zero is still a value nonetheless.
 
-But now let's say Alexa starts practicing the guitar. All of a sudden, Alexa's musical abilities have a positive existence--she now has musical abilities. It's as if practicing the guitar _initialized_ Alexa's musical potential and brought it out of its 'nil' existential state. If we were to try to mimic this example with code, we could define a few 'practice' methods pertaining to different musical instruments within our `Robot` class.
+[insert image of robot object state]
+
+But now let's say Alexa starts practicing the guitar. All of a sudden, Alexa's musical abilities have a positive existence--she now has musical abilities. It's as if practicing the guitar _initialized_ Alexa's musical potential and brought it out of its 'nil' existential state. If we were to try to mimic this example with code, we could define a few 'practice' behaviours pertaining to different musical instruments within our `Robot` class.
 
 ```ruby
 class Robot
@@ -345,7 +353,7 @@ class Robot
 end 
 ```
 
-Let's give `alexa` the musical ability to play the guitar and the piano.
+Let’s initialize the musical abilities of `alexa` by invoking the `practice_guitar` and `practice_piano` methods.
 
 ```ruby
 alexa.practice_guitar
@@ -355,15 +363,18 @@ puts alexa.musical
 # => I play piano
 ```
 
-The state of `alexa` has been transformed as the `@musical` instance variable has been initialized and assigned with new values. Notice that the invocation of the `practice_guitar` method _initializes_ the `@musical` instance variable; the call to the `musical` getter method in the ternary operator returns the `nil` value associated with the `@musical` instance variable, and this falsey value causes the ternary operator to evaluate to `false`, which in turn leads to the `self.musical = ['I play guitar']` section of code to the right of the `:` operator being executed instead of the `self.musical << 'I play guitar'` section of code.
+The state of `alexa` has been transformed as the `@musical` instance variable has been initialized and assigned with new values. Notice that the invocation of the `practice_guitar` method _initializes_ the `@musical` instance variable; the call to the `musical` getter method in the ternary operator returns the `nil` value associated with the `@musical` instance variable, and this _falsey_ value causes the ternary operator to evaluate to `false`, which in turn leads to the `self.musical = ['I play guitar']` section of code to the right of the `:` operator being executed instead of the `self.musical << 'I play guitar'` section of code.
 
-However, since the `@musical` instance variable has already been initialized when we invoke the `practice_piano` method on `alexa`, the `musical` getter method returns `["guitar"]`, which is a truthy value and thus the ternary operator evaluates to `true`. That causes the `self.musical << 'I play piano'` section of code to be executed instead of the `self.musical = ['I play piano']` section of code.
+However, since the `@musical` instance variable has already been initialized when we invoke the `practice_piano` method on `alexa`, the `musical` getter method returns `["guitar"]`, which is a _truthy_ value and thus the ternary operator evaluates to `true`. That causes the `self.musical << 'I play piano'` section of code to be executed instead of the `self.musical = ['I play piano']` section of code.
 
-Alexa's latent musical abilities have now been realized through praciticing the guitar and the piano. She is still the same robot, but her state has been transformed. We could continue to transform the state of `alexa` by invoking the `practice_singing` method on `alexa`, and the `@musical` instance variable would keep track of this change. Thus, while state tracks attributes for the object, instance variables keep track of an object's state.
+The `alexa` object's latent musical abilities have now been realized through praciticing the guitar and the piano. She is still the same Robot object, but her state has been transformed--she is the same, but different. We could continue to transform the state of `alexa` by invoking the `practice_singing` method on `alexa`, and the `@musical` instance variable would keep track of this change. Thus, while state tracks attributes for the object, instance variables keep track of an object's state.
 
 ##### Conclusion  
 
 To sum up. Classes are forms that predetermine the particular objects or instances of the class. The essence of any particular object is defined within the Class. This essence is comprised of behaviours and attributes. When an object is instantiated it endowed with a state, which is prefigured by the attributes of the class and indeed which tracks those attributes.
+
+- mention something about inheritance (i.e. about how attributes and behaviours are inherited)
+- 
 
 ---
 
@@ -596,15 +607,28 @@ The state of `alexa` has been transformed as the `@musical` instance variable ha
 
 However, since the `@musical` instance variable has been initialized, when we invoke the `practice_piano` method on `alexa`, the `musical` getter method returns `["guitar"]`, which is a truthy value and thus the ternary operator evaluates to `true`. That causes the `self.musical << 'I play piano'` section of code to be executed instead of the `self.musical = ['I play piano']` section of code.
 
-Alexa's latent musical abilities have now been realized through praciticing the guitar and the piano. She is still the same robot, but her state has been transformed. 
+Alexa's latent musical abilities have now been realized through praciticing the guitar and the piano. She is still the same robot, but her state has been transformed — she is the same, but different. We could continue to transform the state of `alexa` by invoking the `practice_singing` method on `alexa`, and the `@musical` instance variable would keep track of this change. Thus, while state tracks attributes for the object, instance variables keep track of an object's state.
+
+#### Concluding Remarks
+
+To sum up this rather lengthy discussion, here is a list of some of the major points that were covered:
+
+1. Classes define an essence for objects, consisting of attributes and behaviours.
+2. Objects are instantiated from classes and are predetermined by the class definition.
+3. An object’s state tracks the attributes of the class, and an object’s instance variables keep track of its state.
+4. Class behaviours predetermine the instance methods pertaining to every particular object of the class.
+5. Class attributes predetermine the instance variables pertaining to every particular object of the class.
+6. Attributes may posses two contingent behavioural properties, and the contingency of these two properties is a precondition for encapsulation.
+
+Those are the major points. Obviously, there are many things we didn’t discuss, such as how to think about class variables and constant variables and whether or not we can neatly file them under the term attribute. The important thing here was outline as much of the core model around objects and classes without going to deep into the exceptions.
+
+We also didn’t say much about inheritance. But based on the general model outlined here, we can say that when one class inherits from another, it inherits both attributes and behaviours. Based on the distinction between attributes and instance variables that we have made, it should be evident that classes don’t inherit instance variables. Instance variables are unique to their particular objects and do not exist outside of them.
+
+One last point. We’ve emphasized how in the OOP paradigm within Ruby, essence precedes existence. There may be a slight exception, however — duck typing. “If it walks like a duck and quacks like a duck, then it must be a duck.” Regardless of what class a particular object is instantiated from, if it is able to behave in a way that is similar to how objects instantiated from other classes behave, then such objects may be able to be treated as a common type for certain applications. Thus, the existentialists have a point: existence may indeed precede essence. Of course, Plato would argue that even similar behaviours must be codified prior to any being’s ability to perform those behaviours. But it’s nice that even Ruby provides us with some of the dynamism and ambiguity existing in the real world.
 
 
 
 
 
 I want to say one more thing specific to the idea that state's track attributes in order to flesh out why this idea should be emphasized. Consider our `Robot` class. Suppose we add another `attr_accessor` getter/setter method for a 'love' attribute. Notice that we make this change directly in the class itself without doing anything to any of our already existing Robot objects. If the states of our respective objects are indeed tracking the attributes of the class, then then there will exist uninitialized instance variables associated with the 'love' attribute without having invoked any method on any of our objects. Those unitialized local variables are in a latent state, and are already at work, keeping track of the object's state. In this case the unitialized `@love` instance variable is associated with the value `nil`. Our robots have the potential for 'love', but that potential has yet to become a substantive reality.
-
-
-
-
 

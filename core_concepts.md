@@ -606,3 +606,142 @@ Family.new.do_leisure_activity(family)
 ```
 
 We get the same output, but our `do_leisure_activity` behaviour is defined much more simply and it is ultimately more flexible, as we could essentially run it with any object as an element of the array so long as the object in question has an instance method called `leisure_activity`.
+
+---
+
+`self`
+
+* Two main uses: 1) disambiguate from creating a local variable; and 2) defining a class method.
+
+
+
+We use `self ` to specify a certain scope within our program, which means that `self` can refer to different things depending on where it is used. `self` is a way of being explicit about what our program is referencing and what our intentions are as far as behaviour.
+
+One of the main contexts where we will find `self` being used then is within an instance method defintion that is within the class definition, where it is being used to disambiguate from a local variable. This is mostly used in the context of calling a setter method where we want to disambiguate from initializing a local variable. When we use `self` in this manner within an instance method, `self` is returning the calling object. That means whatever object we are calling the instance method on, `self` will refer to that very same object.  
+
+As an example, let's take our `Parent` class definition. 
+
+```ruby
+class Parent
+  def initialize(name)
+    @name = name
+  end
+
+  def walk
+    puts "I'm going for a nice leisurely walk."
+  end
+
+  def talk
+    puts "I'm talking."
+  end
+
+  def leisure_activity
+    puts "I'm #{@name} and I like to play Scrabble."
+  end
+end
+```
+
+Notice that for our `leisure_activity` behaviour we use string interpolation to reference our 'name' attribute. Let's introduce a getter method that we can reference in the string interpolation rather than the `@name` instance variable. While we're at it, let's add a setter method as well, because we want to illustrate the importance of using `self` to disambiguate from initializing a local variabe whenever we use a setter method within an instance method definition. Thus, we'll add an `attr_accessor` that will suppy us with both a getter and setter method for our 'name' attribute.
+
+```ruby
+class Parent
+  attr_accessor :name
+  
+  def initialize(name)
+    @name = name
+  end
+
+	# ... rest of code omitted for brevity.
+
+  def leisure_activity
+    puts "I'm #{name} and I like to play Scrabble."
+  end
+end
+```
+
+Notice the two changes: 1) addition of the `attr_accessor` method; and 2) the replacement of `@name` with `name` in `leisure_activity`. So, if we call `leisure_activity` on our `peggy` Parent object initialized earlier, we should get the same output as if we were still referencing the `@name` instance variable rather than the `name` getter method.
+
+```ruby
+peggy.leisure_activity
+# => "I'm Peggy and I like to play Scrabble."
+```
+
+Notice also that we could have also prepended `name` in the string interpolation with `self` and we would get the same result.
+
+```ruby
+class Parent
+	# ... rest of code omitted for brevity.
+
+  def leisure_activity
+    puts "I'm #{self.name} and I like to play Scrabble."
+  end
+end
+
+peggy.leisure_activity
+# => "I'm Peggy and I like to play Scrabble."
+```
+
+However, in this case the `self` is unnecessary, and we should avoid using it whenever it is unnecessary.
+
+But let's say we want to define an `add_last_name` behaviour that will append a String representation of a last name to the `@name` intance variable.
+
+```ruby
+class Parent
+	# ... rest of code omitted for brevity.
+
+  def add_last_name(last_name)
+    name += " #{last_name}"
+  end
+end
+```
+
+But when we try to invoke this method on our `peggy` object we get an error.
+
+```ruby
+peggy.add_last_name("Jones")
+# => NoMethodError: undefined method `+' for nil:NilClass
+```
+
+This is because Ruby thinks `name` within our method definition is a local variable, and one that we have not yet initialized. That is why Ruby won't allow us to perform `+`, because the local variable is returning `nil` and `+` is an undefined method within the `NilClass`. In order to disambiguate between `name` as a local variable and our `name` setter method, we need to prepend it with `self`.
+
+```ruby
+class Parent
+	# ... rest of code omitted for brevity.
+
+  def add_last_name(last_name)
+    self.name += " #{last_name}"
+  end
+end
+```
+
+Now, we can call our `add_last_name` method and then invoke the `name` getter method on `peggy` to see the updated name change.
+
+```ruby
+peggy.add_last_name("Jones")
+peggy.name
+# => "Peggy Jones"
+```
+
+The other main context where we find `self` being used is whenever we are defining a class method. Class methods define behaviour for the class, rather than instances of the class. In order to define a class method, we must prepend the name of the method with `self`. In this context, `self` references the class. Here's an example with our `Parent` class.
+
+```ruby
+class Parent
+	# ... rest of code omitted for brevity.
+
+	def self.what_i_am
+    puts "I'm a parent!!!"
+  end
+end
+```
+
+In order to use this method we must call it on the class itself.
+
+```ruby
+Parent.what_i_am
+# => I'm a parent!!!
+```
+
+---
+
+`public`, `private`, and `protected`
+
